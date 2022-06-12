@@ -8,19 +8,20 @@ import java.util.Random;
 
 // @lc code=start
 class Solution {
+    // k starts from 1
     public int findKthLargest(int[] nums, int k) {
         return findKthSmallest(nums, 0, nums.length - 1, nums.length - k);
     }
 
-    // hi inclusive
+    // k starts from 0, right inclusive
     public int findKthSmallest(int[] nums, int left, int right, int k) {
-        int q = partition(nums, left, right);
-        if (q == k) {
-            return nums[q];
-        } else if (q <= k) {
-            return findKthSmallest(nums, q + 1, right, k);
+        int p = partition(nums, left, right);
+        if (p == k) {
+            return nums[p];
+        } else if (p < k) {
+            return findKthSmallest(nums, p + 1, right, k);
         } else {
-            return findKthSmallest(nums, left, q - 1, k);
+            return findKthSmallest(nums, left, p - 1, k);
         }
     }
 
