@@ -1,5 +1,4 @@
-import javax.management.ListenerNotFoundException;
-
+import java.util.*;
 /*
  * @lc app=leetcode id=23 lang=java
  *
@@ -7,16 +6,6 @@ import javax.management.ListenerNotFoundException;
  */
 
 // @lc code=start
-/**
- * Definition for singly-linked list.
- * public class ListNode {
- * int val;
- * ListNode next;
- * ListNode() {}
- * ListNode(int val) { this.val = val; }
- * ListNode(int val, ListNode next) { this.val = val; this.next = next; }
- * }
- */
 class Solution {
     public ListNode mergeKLists(ListNode[] lists) {
         if (lists == null || lists.length == 0) {

@@ -1,4 +1,4 @@
-import java.util.Map;
+import java.util.*;
 
 /*
  * @lc app=leetcode id=501 lang=java

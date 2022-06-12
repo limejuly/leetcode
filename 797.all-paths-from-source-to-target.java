@@ -1,4 +1,4 @@
-import java.util.LinkedList;
+import java.util.*;
 
 /*
  * @lc app=leetcode id=797 lang=java
