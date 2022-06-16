@@ -6,45 +6,37 @@
  */
 
 // @lc code=start
-class Solution0 {
+class Solution {
     public double findMedianSortedArrays(int[] nums1, int[] nums2) {
         if (nums1.length > nums2.length) {
             return findMedianSortedArrays(nums2, nums1);
         }
 
-        int m = nums1.length;
-        int n = nums2.length;
-        int left = 0, right = m;
-        // median1：前一部分的最大值
-        // median2：后一部分的最小值
+        int len1 = nums1.length, len2 = nums2.length;
         int median1 = 0, median2 = 0;
-
+        int left = 0, right = len1;
         while (left <= right) {
-            // i, j belong to second part
             int i = (left + right) / 2;
-            int j = (m + n + 1) / 2 - i;// +1 to combine odd and even
+            int j = (len1 + len2 + 1) / 2 - i;
 
-            // nums_im1, nums_i, nums_jm1, nums_j 分别表示 nums1[i-1], nums1[i], nums2[j-1],
-            // nums2[j]
-            // 当一个数组不出现在前一部分时,对应的值为负无穷,就不会对前一部分的最大值产生影响
-            int nums_im1 = (i == 0 ? Integer.MIN_VALUE : nums1[i - 1]);
-            // 当一个数组不出现在后一部分时,对应的值为正无穷,就不会对后一部分的最小值产生影响
-            int nums_i = (i == m ? Integer.MAX_VALUE : nums1[i]);
-            int nums_jm1 = (j == 0 ? Integer.MIN_VALUE : nums2[j - 1]);
-            int nums_j = (j == n ? Integer.MAX_VALUE : nums2[j]);
+            int nums1im1 = i == 0 ? Integer.MIN_VALUE : nums1[i - 1];
+            int nums1i = i == len1 ? Integer.MAX_VALUE : nums1[i];
+            int nums2jm1 = j == 0 ? Integer.MIN_VALUE : nums2[j - 1];
+            int nums2j = j == len2 ? Integer.MAX_VALUE : nums2[j];
 
-            if (nums_im1 <= nums_j) {
-                median1 = Math.max(nums_im1, nums_jm1);
-                median2 = Math.min(nums_i, nums_j);
+            if (nums1im1 <= nums2j) {
+                median1 = Math.max(nums1im1, nums2jm1);
+                median2 = Math.min(nums1i, nums2j);
                 left = i + 1;
             } else {
                 right = i - 1;
             }
         }
-        return (m + n) % 2 == 0 ? (median1 + median2) / 2.0 : median1;
+        return (len1 + len2) % 2 == 0 ? (median1 + median2) / 2.0 : median1;
     }
 }
 
+// @lc code=end
 class Solution1 {
     public double findMedianSortedArrays(int[] nums1, int[] nums2) {
         int l = nums1.length + nums2.length;
@@ -88,7 +80,7 @@ class Solution1 {
     }
 }
 
-class Solution {
+class Solution2 {
     public double findMedianSortedArrays(int[] A, int[] B) {
         int m = A.length;
         int n = B.length;
@@ -110,4 +102,3 @@ class Solution {
             return right;
     }
 }
-// @lc code=end

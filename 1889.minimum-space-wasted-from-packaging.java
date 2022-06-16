@@ -8,72 +8,38 @@ import java.util.Arrays;
 
 // @lc code=start
 class Solution {
-    public int minWastedSpace(int[] packages, int[][] boxes) {
-        Arrays.sort(packages);
-        int plen = packages.length;
-        long minWaste = Integer.MAX_VALUE;
-        long pSum = 0;
-        for (int i = 0; i < packages.length; i++) {
-            pSum += packages[i];
-        }
-
-        for (int j = 0; j < boxes.length; j++) {
-            int[] group = boxes[j];
-            Arrays.sort(group);
-            int glen = group.length;
-            // can't fit in
-            if (packages[plen - 1] > group[glen - 1]) {
+    public int minWastedSpace2(int[] A, int[][] boxes) {
+        Arrays.sort(A);
+        long inf = (long) 1e11, res = inf, mod = (long) 1e9 + 7, sumA = 0L;
+        for (int a : A)
+            sumA += a;
+        for (int[] B : boxes) {
+            Arrays.sort(B);
+            if (B[B.length - 1] < A[A.length - 1])
                 continue;
+            long cur = 0, i = 0, j;
+            for (int b : B) {
+                // j 不包括, 表示装到 j-1 个.
+                j = binarySearch(A, b + 1);
+                cur += b * (j - i);
+                i = j;
             }
-            long used = 0;
-            int last = -1;
-            int firstBox = searchLarger(group, packages[0], 0, glen - 1);
-            for (int i = firstBox; i < group.length; i++) {
-                int current = searchSmaller(packages, group[i], last + 1, plen - 1);
-                if (j == 0) {
-                    System.out.println(current);
-                }
-                if (current > 0) {
-                    used += (current - last) * group[i];
-                    last = current;
-                }
-            }
-            long waste = used - pSum;
-            minWaste = Math.min(minWaste, waste);
+            res = Math.min(res, cur);
         }
-        long res = (minWaste == Integer.MAX_VALUE) ? -1 : minWaste;
-        return (int) res % (1000000000 + 7);
+        return res < inf ? (int) ((res - sumA) % mod) : -1;
     }
 
-    // find largest nums[k] <= p
-    public int searchSmaller(int[] nums, int p, int left, int right) {
-        int res = -1;
-        while (left <= right) {
-            int mid = (right - left) / 2 + left;
-            if (nums[mid] > p) {
-                right = mid - 1;
-            } else if (nums[mid] <= p) {
-                res = mid;
-                left = mid + 1;
-            }
+    // smallest a <b
+    private int binarySearch(int[] A, int b) {
+        int l = 0, r = A.length;
+        while (l < r) {
+            int m = (l + r) / 2;
+            if (A[m] < b)
+                l = m + 1;
+            else
+                r = m;
         }
-        return res;
+        return l;
     }
-
-    // find smallest nums[k] >= p
-    public int searchLarger(int[] nums, int p, int left, int right) {
-        int res = -1;
-        while (left <= right) {
-            int mid = (right - left) / 2 + left;
-            if (nums[mid] >= p) {
-                res = mid;
-                right = mid - 1;
-            } else if (nums[mid] < p) {
-                left = mid + 1;
-            }
-        }
-        return res;
-    }
-
 }
 // @lc code=end
