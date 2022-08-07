@@ -10,34 +10,35 @@ import java.util.Random;
 class Solution {
     // k starts from 1
     public int findKthLargest(int[] nums, int k) {
-        return findKthSmallest(nums, 0, nums.length - 1, nums.length - k);
+        return qSelect(nums, 0, nums.length, nums.length - k);
     }
 
-    // k starts from 0, right inclusive
-    public int findKthSmallest(int[] nums, int left, int right, int k) {
+    // k starts from 0, right exclusive
+    public int qSelect(int[] nums, int left, int right, int k) {
         int p = partition(nums, left, right);
         if (p == k) {
-            return nums[p];
+            return nums[k];
         } else if (p < k) {
-            return findKthSmallest(nums, p + 1, right, k);
+            return qSelect(nums, p + 1, right, k);
         } else {
-            return findKthSmallest(nums, left, p - 1, k);
+            return qSelect(nums, left, p, k);
         }
     }
 
     public int partition(int[] nums, int left, int right) {
-        int pi = new Random().nextInt(right - left + 1) + left;
+        int pi = new Random().nextInt(right - left) + left;
         int pivot = nums[pi];
-        swap(nums, pi, right);
+        swap(nums, pi, right - 1);
 
         int i = left - 1;
         for (int j = left; j < right; j++) {
-            if (nums[j] <= pivot) {
+            if (nums[j] < pivot) {
                 i++;
                 swap(nums, i, j);
             }
         }
-        swap(nums, i + 1, right);
+
+        swap(nums, i + 1, right - 1);
         return i + 1;
     }
 
